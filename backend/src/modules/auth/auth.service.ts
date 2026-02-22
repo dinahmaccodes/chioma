@@ -176,7 +176,7 @@ export class AuthService {
         refreshToken: null,
         mfaRequired: true,
         mfaToken: tempToken,
-      } as AuthResponseDto & { mfaRequired: true; mfaToken: string };
+      };
     }
 
     this.logger.log(`User logged in successfully: ${user.id}`);
