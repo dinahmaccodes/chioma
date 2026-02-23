@@ -30,6 +30,7 @@ import { CsrfMiddleware } from './common/middleware/csrf.middleware';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { SentryModule } from '@sentry/nestjs/setup';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { SentryModule } from '@sentry/nestjs/setup';
     NotificationsModule,
     ProfileModule,
     SecurityModule,
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [

@@ -280,7 +280,9 @@ describe('AuthService', () => {
       const result = await service.login(loginDto);
 
       expect(result.mfaRequired).toBe(true);
-      expect((result as MfaRequiredResponseDto).mfaToken).toBe('mock-mfa-token');
+      expect((result as MfaRequiredResponseDto).mfaToken).toBe(
+        'mock-mfa-token',
+      );
       expect(result.user.email).toBe(mockUser.email);
       // AuthSuccessResponseDto fields must NOT be present
       expect((result as AuthSuccessResponseDto).accessToken).toBeUndefined();
@@ -304,8 +306,12 @@ describe('AuthService', () => {
       const result = await service.login(loginDto);
 
       expect(result.mfaRequired).toBe(false);
-      expect((result as AuthSuccessResponseDto).accessToken).toBe('mock-access-token');
-      expect((result as AuthSuccessResponseDto).refreshToken).toBe('mock-refresh-token');
+      expect((result as AuthSuccessResponseDto).accessToken).toBe(
+        'mock-access-token',
+      );
+      expect((result as AuthSuccessResponseDto).refreshToken).toBe(
+        'mock-refresh-token',
+      );
     });
 
     it('should throw UnauthorizedException for inactive account', async () => {

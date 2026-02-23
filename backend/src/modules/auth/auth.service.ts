@@ -104,7 +104,9 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto): Promise<AuthSuccessResponseDto | MfaRequiredResponseDto> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<AuthSuccessResponseDto | MfaRequiredResponseDto> {
     const { email, password } = loginDto;
 
     const user = await this.userRepository.findOne({
