@@ -179,7 +179,8 @@ impl EscrowContract {
         EscrowStorage::add_approval(&env, &escrow_id, new_approval);
 
         // Read the updated count via O(1) lookup
-        let approval_count = EscrowStorage::get_approval_count_for_target(&env, &escrow_id, &release_to);
+        let approval_count =
+            EscrowStorage::get_approval_count_for_target(&env, &escrow_id, &release_to);
 
         // If 2 or more unique signers approve, execute release
         if approval_count >= 2 {
@@ -193,7 +194,11 @@ impl EscrowContract {
             // Clear approvals and counters after execution
             EscrowStorage::clear_approvals(&env, &escrow_id);
             let targets = [escrow.beneficiary.clone(), escrow.depositor.clone()];
-            let signers = [escrow.depositor.clone(), escrow.beneficiary.clone(), escrow.arbiter.clone()];
+            let signers = [
+                escrow.depositor.clone(),
+                escrow.beneficiary.clone(),
+                escrow.arbiter.clone(),
+            ];
             EscrowStorage::clear_approval_counts(&env, &escrow_id, &targets, &signers);
 
             // INTERACTIONS: Token transfer from escrow contract to release target
@@ -240,6 +245,10 @@ impl EscrowContract {
     ) -> Result<u32, EscrowError> {
         // Verify escrow exists
         EscrowStorage::get(&env, &escrow_id).ok_or(EscrowError::EscrowNotFound)?;
-        Ok(EscrowStorage::get_approval_count_for_target(&env, &escrow_id, &release_to))
+        Ok(EscrowStorage::get_approval_count_for_target(
+            &env,
+            &escrow_id,
+            &release_to,
+        ))
     }
 }

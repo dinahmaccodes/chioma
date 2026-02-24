@@ -59,18 +59,11 @@ impl EscrowStorage {
         release_to: &Address,
     ) -> u32 {
         let key = DataKey::ApprovalCount(escrow_id.clone(), release_to.clone());
-        env.storage()
-            .persistent()
-            .get::<_, u32>(&key)
-            .unwrap_or(0)
+        env.storage().persistent().get::<_, u32>(&key).unwrap_or(0)
     }
 
     /// Increment the approval count for a specific release target.
-    pub fn increment_approval_count(
-        env: &Env,
-        escrow_id: &BytesN<32>,
-        release_to: &Address,
-    ) {
+    pub fn increment_approval_count(env: &Env, escrow_id: &BytesN<32>, release_to: &Address) {
         let count = Self::get_approval_count_for_target(env, escrow_id, release_to);
         let key = DataKey::ApprovalCount(escrow_id.clone(), release_to.clone());
         env.storage().persistent().set(&key, &(count + 1));
@@ -83,11 +76,7 @@ impl EscrowStorage {
         signer: &Address,
         release_to: &Address,
     ) -> bool {
-        let key = DataKey::SignerApproved(
-            escrow_id.clone(),
-            signer.clone(),
-            release_to.clone(),
-        );
+        let key = DataKey::SignerApproved(escrow_id.clone(), signer.clone(), release_to.clone());
         env.storage()
             .persistent()
             .get::<_, bool>(&key)
@@ -101,11 +90,7 @@ impl EscrowStorage {
         signer: &Address,
         release_to: &Address,
     ) {
-        let key = DataKey::SignerApproved(
-            escrow_id.clone(),
-            signer.clone(),
-            release_to.clone(),
-        );
+        let key = DataKey::SignerApproved(escrow_id.clone(), signer.clone(), release_to.clone());
         env.storage().persistent().set(&key, &true);
     }
 
@@ -120,11 +105,8 @@ impl EscrowStorage {
             let count_key = DataKey::ApprovalCount(escrow_id.clone(), target.clone());
             env.storage().persistent().remove(&count_key);
             for signer in signers {
-                let flag_key = DataKey::SignerApproved(
-                    escrow_id.clone(),
-                    signer.clone(),
-                    target.clone(),
-                );
+                let flag_key =
+                    DataKey::SignerApproved(escrow_id.clone(), signer.clone(), target.clone());
                 env.storage().persistent().remove(&flag_key);
             }
         }

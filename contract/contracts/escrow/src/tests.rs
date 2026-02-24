@@ -244,4 +244,3 @@ fn test_approval_count_tracks_per_target() {
     let token_client = TokenClient::new(&env, &token_address);
     assert_eq!(token_client.balance(&beneficiary), amount);
 }
-
