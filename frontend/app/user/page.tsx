@@ -16,7 +16,8 @@ import {
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import { MicroCharts } from '@/components/dashboard/MicroCharts';
 import { TenantOnboardingBanner } from '@/components/user/TenantOnboardingBanner';
-import { useRoleRedirect } from '@/hooks/useRoleRedirect';
+import { useAuth } from '@/store/authStore';
+import { useUserAgreements } from '@/lib/query/hooks/use-agreements';
 import { useModal } from '@/contexts/ModalContext';
 import { apiClient } from '@/lib/api-client';
 import type { AgreementSigningData } from '@/components/modals/types';
@@ -44,8 +45,6 @@ const mockAgreements = [
     status: 'Completed',
   },
 ];
-
-const agreements = process.env.NODE_ENV === 'production' ? [] : mockAgreements;
 
 const analyticsPreviewData = [
   { month: 'Jan', views: 120 },
@@ -96,6 +95,22 @@ export default function UserDashboardOverview() {
   const { openModal } = useModal();
   const router = useRouter();
   const { loading } = useAuth();
+  const { data: apiAgreements = [] } = useUserAgreements();
+
+  const agreements =
+    apiAgreements.length > 0
+      ? apiAgreements.map((a) => ({
+          id: a.id,
+          property: a.displayTitle ?? 'Rental property',
+          amount: a.monthlyRent ? `$${a.monthlyRent.toLocaleString()}` : '—',
+          dueDate: a.endDate
+            ? new Date(a.endDate).toLocaleDateString()
+            : '—',
+          status: a.status ?? 'Active',
+        }))
+      : process.env.NODE_ENV === 'production'
+        ? []
+        : mockAgreements;
 
   if (loading) {
     return (
