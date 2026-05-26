@@ -103,9 +103,7 @@ export default function UserDashboardOverview() {
           id: a.id,
           property: a.displayTitle ?? 'Rental property',
           amount: a.monthlyRent ? `$${a.monthlyRent.toLocaleString()}` : '—',
-          dueDate: a.endDate
-            ? new Date(a.endDate).toLocaleDateString()
-            : '—',
+          dueDate: a.endDate ? new Date(a.endDate).toLocaleDateString() : '—',
           status: a.status ?? 'Active',
         }))
       : process.env.NODE_ENV === 'production'

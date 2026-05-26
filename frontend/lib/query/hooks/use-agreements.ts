@@ -45,14 +45,18 @@ function formatPersonName(person?: {
 }) {
   if (!person) return 'Unknown';
   if (person.name) return person.name;
-  return [person.firstName, person.lastName].filter(Boolean).join(' ') || 'Unknown';
+  return (
+    [person.firstName, person.lastName].filter(Boolean).join(' ') || 'Unknown'
+  );
 }
 
 export function useUserAgreements() {
   return useQuery({
     queryKey: ['agreements', 'mine'],
     queryFn: async () => {
-      const response = await apiClient.get<AgreementsResponse>('/agreements?limit=50');
+      const response = await apiClient.get<AgreementsResponse>(
+        '/agreements?limit=50',
+      );
       const list = response.data.data ?? [];
       return list.map((agreement) => ({
         ...agreement,

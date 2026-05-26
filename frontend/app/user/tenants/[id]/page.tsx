@@ -26,7 +26,10 @@ export default function TenantProfilePage() {
         <p className="text-blue-200/50 text-sm mb-6">
           No agreement matches this tenant reference.
         </p>
-        <Link href="/user/tenants" className="text-blue-400 hover:text-blue-300">
+        <Link
+          href="/user/tenants"
+          className="text-blue-400 hover:text-blue-300"
+        >
           ← Back to tenants
         </Link>
       </div>
@@ -67,7 +70,9 @@ export default function TenantProfilePage() {
             <dt className="text-blue-300/40 uppercase tracking-wider text-xs mb-1">
               Status
             </dt>
-            <dd className="text-white capitalize">{agreement.status ?? 'unknown'}</dd>
+            <dd className="text-white capitalize">
+              {agreement.status ?? 'unknown'}
+            </dd>
           </div>
           <div className="bg-white/5 rounded-xl p-4">
             <dt className="text-blue-300/40 uppercase tracking-wider text-xs mb-1">

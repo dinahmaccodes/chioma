@@ -44,12 +44,12 @@ This document defines the end-to-end incident response procedures for the Chioma
 
 ### Severity Levels
 
-| Severity | Name      | Impact                                              | Response Target | Example                                      |
-| -------- | --------- | --------------------------------------------------- | --------------- | -------------------------------------------- |
-| **SEV1** | Critical  | Full platform outage or data loss; all users affected | Immediate (≤15 min) | API unreachable, database corruption       |
-| **SEV2** | High      | Core feature degraded; significant user impact       | ≤30 min         | Login failures, escrow processing down       |
-| **SEV3** | Medium    | Partial feature degradation; workaround available    | ≤2 hours        | Redis cache miss spike, slow property search |
-| **SEV4** | Low       | Minor issue; negligible user impact                  | ≤24 hours       | Dashboard rendering delay, stale CDN asset   |
+| Severity | Name     | Impact                                                | Response Target     | Example                                      |
+| -------- | -------- | ----------------------------------------------------- | ------------------- | -------------------------------------------- |
+| **SEV1** | Critical | Full platform outage or data loss; all users affected | Immediate (≤15 min) | API unreachable, database corruption         |
+| **SEV2** | High     | Core feature degraded; significant user impact        | ≤30 min             | Login failures, escrow processing down       |
+| **SEV3** | Medium   | Partial feature degradation; workaround available     | ≤2 hours            | Redis cache miss spike, slow property search |
+| **SEV4** | Low      | Minor issue; negligible user impact                   | ≤24 hours           | Dashboard rendering delay, stale CDN asset   |
 
 ### Classification Criteria
 
@@ -77,15 +77,15 @@ Is the platform completely unreachable OR is data at risk?
 
 ### Incident Categories
 
-| Category          | Description                                | Examples                                          |
-| ----------------- | ------------------------------------------ | ------------------------------------------------- |
-| **Availability**  | Service or component unreachable           | API down, database unreachable, DNS failure       |
-| **Performance**   | Degraded latency or throughput             | High P95 latency, slow queries, queue backlog     |
-| **Security**      | Unauthorized access or data exposure       | Breach, credential leak, suspicious API usage     |
-| **Data**          | Data loss, corruption, or integrity issue  | Missing records, migration failure, sync drift    |
-| **Dependency**    | Third-party or external service failure     | Stellar RPC down, S3 outage, Neon unavailability  |
-| **Deployment**    | Failed deploy or bad release               | Build failure, config error, rollback needed       |
-| **Fraud**         | Suspicious platform activity               | Fake listings, payment manipulation, bot abuse     |
+| Category         | Description                               | Examples                                         |
+| ---------------- | ----------------------------------------- | ------------------------------------------------ |
+| **Availability** | Service or component unreachable          | API down, database unreachable, DNS failure      |
+| **Performance**  | Degraded latency or throughput            | High P95 latency, slow queries, queue backlog    |
+| **Security**     | Unauthorized access or data exposure      | Breach, credential leak, suspicious API usage    |
+| **Data**         | Data loss, corruption, or integrity issue | Missing records, migration failure, sync drift   |
+| **Dependency**   | Third-party or external service failure   | Stellar RPC down, S3 outage, Neon unavailability |
+| **Deployment**   | Failed deploy or bad release              | Build failure, config error, rollback needed     |
+| **Fraud**        | Suspicious platform activity              | Fake listings, payment manipulation, bot abuse   |
 
 ---
 
@@ -95,14 +95,14 @@ Is the platform completely unreachable OR is data at risk?
 
 The Chioma platform uses automated monitoring to detect incidents before users report them.
 
-| Source                | What It Detects                            | Tool                  |
-| --------------------- | ------------------------------------------ | --------------------- |
-| Prometheus Alerts     | Service down, high error rate, latency     | Alertmanager → PagerDuty/Slack |
-| Sentry                | Unhandled exceptions, error spikes         | Sentry → Slack #alerts |
-| Grafana Dashboards    | Anomalous metric patterns                  | Manual review, alert rules |
-| Uptime Checks         | External endpoint reachability             | PagerDuty synthetics  |
-| Bull Queue Monitoring | Failed jobs, growing backlogs              | Prometheus + Grafana  |
-| Log Anomalies         | Error rate spikes in Loki                  | LogQL alerts          |
+| Source                | What It Detects                        | Tool                           |
+| --------------------- | -------------------------------------- | ------------------------------ |
+| Prometheus Alerts     | Service down, high error rate, latency | Alertmanager → PagerDuty/Slack |
+| Sentry                | Unhandled exceptions, error spikes     | Sentry → Slack #alerts         |
+| Grafana Dashboards    | Anomalous metric patterns              | Manual review, alert rules     |
+| Uptime Checks         | External endpoint reachability         | PagerDuty synthetics           |
+| Bull Queue Monitoring | Failed jobs, growing backlogs          | Prometheus + Grafana           |
+| Log Anomalies         | Error rate spikes in Loki              | LogQL alerts                   |
 
 #### Key Alert Rules (reference)
 
@@ -119,14 +119,14 @@ See [Comprehensive Monitoring — Alerting Strategy](./COMPREHENSIVE_MONITORING.
 
 Incidents may also be reported through:
 
-| Channel                     | Audience        | Target Response    |
-| --------------------------- | --------------- | ------------------ |
-| Email (support@chioma.dev)  | External users  | 4 hours (per SLA)  |
-| Discord (#support)          | Community users | 4 hours            |
-| Slack (#backend-support)    | Internal team   | 2 hours            |
-| Slack (#frontend-support)   | Internal team   | 2 hours            |
-| GitHub Issues               | Developers      | 24 hours           |
-| On-call direct page         | On-call engineer | 15 minutes (SEV1/2) |
+| Channel                    | Audience         | Target Response     |
+| -------------------------- | ---------------- | ------------------- |
+| Email (support@chioma.dev) | External users   | 4 hours (per SLA)   |
+| Discord (#support)         | Community users  | 4 hours             |
+| Slack (#backend-support)   | Internal team    | 2 hours             |
+| Slack (#frontend-support)  | Internal team    | 2 hours             |
+| GitHub Issues              | Developers       | 24 hours            |
+| On-call direct page        | On-call engineer | 15 minutes (SEV1/2) |
 
 ### Detection Procedure
 
@@ -142,12 +142,12 @@ Incidents may also be reported through:
 
 ### Escalation Levels
 
-| Level | Role                   | When to Escalate To                                    | Contact Method         |
-| ----- | ---------------------- | ------------------------------------------------------ | ---------------------- |
-| L1    | On-Call Engineer       | Cannot diagnose within 30 min, or SEV1/SEV2 confirmed | PagerDuty → L2        |
-| L2    | Backend/Frontend Lead  | Issue spans multiple services, or needs infra access   | Slack DM → L3         |
-| L3    | CTO / Engineering Lead | Business-critical, security breach, or data loss       | Phone call / Slack     |
-| L4    | CEO / Legal            | Public-facing breach, regulatory, or compliance event  | Phone call from CTO   |
+| Level | Role                   | When to Escalate To                                   | Contact Method      |
+| ----- | ---------------------- | ----------------------------------------------------- | ------------------- |
+| L1    | On-Call Engineer       | Cannot diagnose within 30 min, or SEV1/SEV2 confirmed | PagerDuty → L2      |
+| L2    | Backend/Frontend Lead  | Issue spans multiple services, or needs infra access  | Slack DM → L3       |
+| L3    | CTO / Engineering Lead | Business-critical, security breach, or data loss      | Phone call / Slack  |
+| L4    | CEO / Legal            | Public-facing breach, regulatory, or compliance event | Phone call from CTO |
 
 ### Escalation Triggers
 
@@ -193,13 +193,13 @@ On-Call Engineer (L1)
 
 For incidents involving third-party dependencies:
 
-| Dependency         | Escalation Path                                     |
-| ------------------ | --------------------------------------------------- |
-| Neon (PostgreSQL)  | Neon support portal + Neon status page              |
-| Stellar Network    | Stellar Dev Discord + Stellar status page           |
-| AWS / S3           | AWS Support case (Business or Enterprise tier)      |
-| Redis / Upstash    | Upstash support + status page                       |
-| Payment Providers  | Provider support portal + account representative    |
+| Dependency        | Escalation Path                                  |
+| ----------------- | ------------------------------------------------ |
+| Neon (PostgreSQL) | Neon support portal + Neon status page           |
+| Stellar Network   | Stellar Dev Discord + Stellar status page        |
+| AWS / S3          | AWS Support case (Business or Enterprise tier)   |
+| Redis / Upstash   | Upstash support + status page                    |
+| Payment Providers | Provider support portal + account representative |
 
 ---
 
@@ -214,22 +214,22 @@ For incidents involving third-party dependencies:
 
 ### Internal Communication
 
-| Channel                  | Purpose                                      | Audience               |
-| ------------------------ | -------------------------------------------- | ---------------------- |
-| Slack `#incidents`       | Real-time incident coordination              | Engineering team       |
-| Slack `#on-call`         | On-call handover and alert discussion        | On-call rotation       |
-| Slack `#alerts`          | Automated alert notifications                | Engineering team       |
-| PagerDuty                | Paging on-call engineer                      | On-call engineer       |
-| Video call (Google Meet) | War room for SEV1/SEV2 incidents             | Incident responders    |
+| Channel                  | Purpose                               | Audience            |
+| ------------------------ | ------------------------------------- | ------------------- |
+| Slack `#incidents`       | Real-time incident coordination       | Engineering team    |
+| Slack `#on-call`         | On-call handover and alert discussion | On-call rotation    |
+| Slack `#alerts`          | Automated alert notifications         | Engineering team    |
+| PagerDuty                | Paging on-call engineer               | On-call engineer    |
+| Video call (Google Meet) | War room for SEV1/SEV2 incidents      | Incident responders |
 
 ### External Communication
 
-| Channel                    | Purpose                                  | Audience              |
-| -------------------------- | ---------------------------------------- | --------------------- |
-| Status page (status.chioma.dev) | Service availability updates       | All users             |
-| Email (noreply@chioma.dev) | Incident notifications to affected users | Affected users        |
-| Discord (#announcements)   | Community updates                        | Community users       |
-| Social media               | Public-facing updates for major outages  | Public                |
+| Channel                         | Purpose                                  | Audience        |
+| ------------------------------- | ---------------------------------------- | --------------- |
+| Status page (status.chioma.dev) | Service availability updates             | All users       |
+| Email (noreply@chioma.dev)      | Incident notifications to affected users | Affected users  |
+| Discord (#announcements)        | Community updates                        | Community users |
+| Social media                    | Public-facing updates for major outages  | Public          |
 
 ### Communication Templates
 
@@ -349,14 +349,14 @@ For SEV3/SEV4, the on-call engineer may fill all roles. For SEV1/SEV2, assign di
 
 These actions can be taken immediately by the on-call engineer without further approval:
 
-| Action                          | When to Use                                         | How                                                                                     |
-| ------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| **Rollback deployment**         | Recent deploy caused the incident                   | `kubectl rollout undo deployment/chioma-backend` or redeploy previous image             |
-| **Scale up instances**          | Traffic spike or resource exhaustion                | `kubectl scale deployment chioma-backend --replicas=N`                                  |
-| **Enable maintenance mode**     | Need to block traffic to prevent data corruption    | Set `MAINTENANCE_MODE=true` env var; nginx returns 503                                 |
-| **Kill stuck processes**        | Process consuming excessive resources               | `kubectl delete pod <pod-name>` (pod will restart)                                      |
-| **Rotate compromised secrets**  | Credential leak confirmed                           | See [Security Incident Runbook](#runbook-security-incident)                             |
-| **Failover database**           | Primary database unreachable                        | Promote Neon read replica; see [Disaster Recovery Plan](./deployment/DISASTER_RECOVERY_PLAN.md) |
+| Action                         | When to Use                                      | How                                                                                             |
+| ------------------------------ | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| **Rollback deployment**        | Recent deploy caused the incident                | `kubectl rollout undo deployment/chioma-backend` or redeploy previous image                     |
+| **Scale up instances**         | Traffic spike or resource exhaustion             | `kubectl scale deployment chioma-backend --replicas=N`                                          |
+| **Enable maintenance mode**    | Need to block traffic to prevent data corruption | Set `MAINTENANCE_MODE=true` env var; nginx returns 503                                          |
+| **Kill stuck processes**       | Process consuming excessive resources            | `kubectl delete pod <pod-name>` (pod will restart)                                              |
+| **Rotate compromised secrets** | Credential leak confirmed                        | See [Security Incident Runbook](#runbook-security-incident)                                     |
+| **Failover database**          | Primary database unreachable                     | Promote Neon read replica; see [Disaster Recovery Plan](./deployment/DISASTER_RECOVERY_PLAN.md) |
 
 ---
 
@@ -370,25 +370,25 @@ Every incident receives a unique identifier: `INC-YYYY-NNN` (e.g., `INC-2026-001
 
 All incidents are tracked in the Chioma incident tracker. Each record must contain:
 
-| Field               | Description                                        | Example                                  |
-| -------------------- | -------------------------------------------------- | ---------------------------------------- |
-| **Incident ID**      | Unique identifier                                  | INC-2026-001                             |
-| **Title**            | Short descriptive title                            | "API 503 errors on /api/v1/properties"  |
-| **Severity**         | SEV1 / SEV2 / SEV3 / SEV4                          | SEV2                                     |
-| **Category**         | Incident category                                  | Availability                             |
-| **Status**           | Open / Investigating / Mitigating / Monitoring / Resolved / Closed | Investigating |
-| **Started At**       | UTC timestamp when incident began                  | 2026-04-24T10:30:00Z                     |
-| **Detected At**      | UTC timestamp when monitoring detected it           | 2026-04-24T10:30:02Z                     |
-| **Reported By**      | Alert source or person                             | PagerDuty / @engineer                    |
-| **Incident Commander** | Person coordinating response                     | @jane-doe                                |
-| **Affected Services** | List of impacted components                        | API, Property Search                     |
-| **Affected Users**   | Estimated number or percentage                     | ~60% of users                            |
-| **Mitigated At**     | UTC timestamp when mitigation applied              | 2026-04-24T10:55:00Z                     |
-| **Resolved At**      | UTC timestamp when service fully restored          | 2026-04-24T11:20:00Z                     |
-| **Root Cause**       | Brief description of root cause                    | Migration added missing index            |
-| **Resolution**       | What fixed the incident                            | Added index, deployed hotfix             |
-| **Post-Incident Review** | Link to PIR document                           | [link]                                   |
-| **Action Items**     | Follow-up tasks from PIR                           | #1234, #1235                             |
+| Field                    | Description                                                        | Example                                |
+| ------------------------ | ------------------------------------------------------------------ | -------------------------------------- |
+| **Incident ID**          | Unique identifier                                                  | INC-2026-001                           |
+| **Title**                | Short descriptive title                                            | "API 503 errors on /api/v1/properties" |
+| **Severity**             | SEV1 / SEV2 / SEV3 / SEV4                                          | SEV2                                   |
+| **Category**             | Incident category                                                  | Availability                           |
+| **Status**               | Open / Investigating / Mitigating / Monitoring / Resolved / Closed | Investigating                          |
+| **Started At**           | UTC timestamp when incident began                                  | 2026-04-24T10:30:00Z                   |
+| **Detected At**          | UTC timestamp when monitoring detected it                          | 2026-04-24T10:30:02Z                   |
+| **Reported By**          | Alert source or person                                             | PagerDuty / @engineer                  |
+| **Incident Commander**   | Person coordinating response                                       | @jane-doe                              |
+| **Affected Services**    | List of impacted components                                        | API, Property Search                   |
+| **Affected Users**       | Estimated number or percentage                                     | ~60% of users                          |
+| **Mitigated At**         | UTC timestamp when mitigation applied                              | 2026-04-24T10:55:00Z                   |
+| **Resolved At**          | UTC timestamp when service fully restored                          | 2026-04-24T11:20:00Z                   |
+| **Root Cause**           | Brief description of root cause                                    | Migration added missing index          |
+| **Resolution**           | What fixed the incident                                            | Added index, deployed hotfix           |
+| **Post-Incident Review** | Link to PIR document                                               | [link]                                 |
+| **Action Items**         | Follow-up tasks from PIR                                           | #1234, #1235                           |
 
 ### Incident Timeline
 
@@ -412,14 +412,14 @@ During an active incident, the scribe maintains a real-time timeline:
 
 Track these incident metrics to measure response effectiveness:
 
-| Metric                            | Target    | Description                                    |
-| --------------------------------- | --------- | ---------------------------------------------- |
-| **MTTA** (Mean Time to Acknowledge) | ≤5 min  | Time from alert to acknowledgment              |
-| **MTTI** (Mean Time to Identify)  | ≤30 min   | Time from alert to root cause identification   |
-| **MTTM** (Mean Time to Mitigate)  | ≤60 min   | Time from alert to mitigation                  |
-| **MTTR** (Mean Time to Resolve)   | ≤4 hours  | Time from alert to full resolution             |
-| **Incident Rate**                 | Decreasing | Number of SEV1/SEV2 incidents per month        |
-| **Repeat Incident Rate**          | <10%      | Incidents with same root cause                 |
+| Metric                              | Target     | Description                                  |
+| ----------------------------------- | ---------- | -------------------------------------------- |
+| **MTTA** (Mean Time to Acknowledge) | ≤5 min     | Time from alert to acknowledgment            |
+| **MTTI** (Mean Time to Identify)    | ≤30 min    | Time from alert to root cause identification |
+| **MTTM** (Mean Time to Mitigate)    | ≤60 min    | Time from alert to mitigation                |
+| **MTTR** (Mean Time to Resolve)     | ≤4 hours   | Time from alert to full resolution           |
+| **Incident Rate**                   | Decreasing | Number of SEV1/SEV2 incidents per month      |
+| **Repeat Incident Rate**            | <10%       | Incidents with same root cause               |
 
 ---
 
@@ -460,12 +460,12 @@ If the resolution involved a rollback:
 
 ### When to Conduct a PIR
 
-| Severity | PIR Required? | Timeline           |
-| -------- | ------------- | ------------------ |
-| SEV1     | Yes           | Within 24 hours    |
-| SEV2     | Yes           | Within 48 hours    |
-| SEV3     | Optional      | Within 1 week      |
-| SEV4     | No            | —                  |
+| Severity | PIR Required? | Timeline        |
+| -------- | ------------- | --------------- |
+| SEV1     | Yes           | Within 24 hours |
+| SEV2     | Yes           | Within 48 hours |
+| SEV3     | Optional      | Within 1 week   |
+| SEV4     | No            | —               |
 
 ### PIR Process
 
@@ -500,9 +500,9 @@ If the resolution involved a rollback:
 
 ## Timeline
 
-| Time (UTC) | Event                                   |
-| ---------- | --------------------------------------- |
-| HH:MM      | [What happened]                         |
+| Time (UTC) | Event           |
+| ---------- | --------------- |
+| HH:MM      | [What happened] |
 
 ## Root Cause
 
@@ -526,9 +526,9 @@ If the resolution involved a rollback:
 
 ## Action Items
 
-| #  | Action Item                             | Owner     | Issue  | Due Date |
-| -- | --------------------------------------- | --------- | ------ | -------- |
-| 1  | [Specific improvement]                  | @person   | #XXX   | YYYY-MM-DD |
+| #   | Action Item            | Owner   | Issue | Due Date   |
+| --- | ---------------------- | ------- | ----- | ---------- |
+| 1   | [Specific improvement] | @person | #XXX  | YYYY-MM-DD |
 
 ## Lessons Learned
 
@@ -761,6 +761,7 @@ kubectl rollout undo deployment/chioma-frontend
 #### Immediate Actions
 
 1. **Contain** — Revoke compromised credentials immediately
+
    ```bash
    # Rotate JWT signing secret
    kubectl set env deployment/chioma-backend JWT_SECRET=<new-secret>
@@ -771,6 +772,7 @@ kubectl rollout undo deployment/chioma-frontend
    # Force password reset for affected users
    # Use admin API: POST /api/v1/admin/users/{id}/force-password-reset
    ```
+
 2. **Assess** — Determine what was accessed or exfiltrated
    - Review audit logs: `SELECT * FROM audit_logs WHERE created_at > '<incident-start>' ORDER BY created_at DESC;`
    - Check access patterns in Grafana / Loki

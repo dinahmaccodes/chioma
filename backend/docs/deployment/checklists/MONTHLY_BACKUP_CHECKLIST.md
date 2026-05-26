@@ -196,6 +196,7 @@ Test all critical tables and data relationships:
   - Verify dispute tracking data complete
 
 - [ ] **Audit Logs**
+
   ```bash
   psql -U drill_user -d chioma_monthly_drill -c \
     "SELECT COUNT(*) as audit_log_entries,
@@ -292,6 +293,7 @@ Test query performance on restored database:
   - Expected: Query completes in < 100ms
 
 - [ ] **Full Table Scan Check**
+
   ```bash
   psql -U drill_user -d chioma_monthly_drill -c \
     "SELECT schemaname, tablename, seq_scan, seq_tup_read

@@ -19,7 +19,11 @@ export class AddKycStatusToUsers1870500000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "users" DROP COLUMN IF EXISTS "kyc_status"`);
-    await queryRunner.query(`DROP TYPE IF EXISTS "public"."users_kyc_status_enum"`);
+    await queryRunner.query(
+      `ALTER TABLE "users" DROP COLUMN IF EXISTS "kyc_status"`,
+    );
+    await queryRunner.query(
+      `DROP TYPE IF EXISTS "public"."users_kyc_status_enum"`,
+    );
   }
 }

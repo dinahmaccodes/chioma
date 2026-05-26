@@ -43,65 +43,65 @@ Use this document alongside:
 
 ### Variable Groups
 
-| Group | Prefix / Key Pattern | Description |
-|---|---|---|
-| Application | `NODE_ENV`, `PORT` | Runtime mode and server port |
-| Database | `DB_*`, `DATABASE_URL` | PostgreSQL connection parameters |
-| Authentication | `JWT_*`, `AUTH_*` | JWT secrets, expiry, and auth rate limits |
-| Rate Limiting | `RATE_LIMIT_*` | Throttler TTL and max-request limits |
-| Redis / Cache | `REDIS_*` | Redis host, port, credentials, TLS |
-| Stellar / Soroban | `STELLAR_*`, `SOROBAN_*`, `*_CONTRACT_ID` | Blockchain network and contract addresses |
-| Anchor | `ANCHOR_*`, `SUPPORTED_FIAT_CURRENCIES` | SEP-6/24 anchor integration |
-| AWS S3 | `AWS_*` | Object storage credentials and bucket |
-| IPFS / Pinata | `PINATA_*` | Decentralised file storage |
-| Payment | `PAYMENT_*`, `PAYSTACK_*`, `FLUTTERWAVE_*` | Payment gateway selection and keys |
-| Email | `EMAIL_*` | SMTP / Gmail service credentials |
-| Frontend | `FRONTEND_URL`, `PASSWORD_RESET_URL`, `API_BASE_URL`, `CORS_ORIGINS` | Client URLs and CORS |
-| Security | `SECURITY_*` | Encryption key, CSRF, session, HSTS, CSP |
-| Logging | `LOG_*` | Log level, format, rotation |
-| Monitoring | `SENTRY_*`, `METRICS_ENABLED`, `TRACING_ENABLED` | Error tracking and observability |
-| Health | `HEALTH_CHECK_TIMEOUT`, `MEMORY_*_THRESHOLD` | Health check thresholds |
-| Bull Queues | `BULL_QUEUE_*` | Job queue retry and backoff settings |
-| Admin / Seed | `ADMIN_*`, `AGENT_*`, `TENANT_*`, `LANDLORD_*` | Default seed account configuration |
+| Group             | Prefix / Key Pattern                                                 | Description                               |
+| ----------------- | -------------------------------------------------------------------- | ----------------------------------------- |
+| Application       | `NODE_ENV`, `PORT`                                                   | Runtime mode and server port              |
+| Database          | `DB_*`, `DATABASE_URL`                                               | PostgreSQL connection parameters          |
+| Authentication    | `JWT_*`, `AUTH_*`                                                    | JWT secrets, expiry, and auth rate limits |
+| Rate Limiting     | `RATE_LIMIT_*`                                                       | Throttler TTL and max-request limits      |
+| Redis / Cache     | `REDIS_*`                                                            | Redis host, port, credentials, TLS        |
+| Stellar / Soroban | `STELLAR_*`, `SOROBAN_*`, `*_CONTRACT_ID`                            | Blockchain network and contract addresses |
+| Anchor            | `ANCHOR_*`, `SUPPORTED_FIAT_CURRENCIES`                              | SEP-6/24 anchor integration               |
+| AWS S3            | `AWS_*`                                                              | Object storage credentials and bucket     |
+| IPFS / Pinata     | `PINATA_*`                                                           | Decentralised file storage                |
+| Payment           | `PAYMENT_*`, `PAYSTACK_*`, `FLUTTERWAVE_*`                           | Payment gateway selection and keys        |
+| Email             | `EMAIL_*`                                                            | SMTP / Gmail service credentials          |
+| Frontend          | `FRONTEND_URL`, `PASSWORD_RESET_URL`, `API_BASE_URL`, `CORS_ORIGINS` | Client URLs and CORS                      |
+| Security          | `SECURITY_*`                                                         | Encryption key, CSRF, session, HSTS, CSP  |
+| Logging           | `LOG_*`                                                              | Log level, format, rotation               |
+| Monitoring        | `SENTRY_*`, `METRICS_ENABLED`, `TRACING_ENABLED`                     | Error tracking and observability          |
+| Health            | `HEALTH_CHECK_TIMEOUT`, `MEMORY_*_THRESHOLD`                         | Health check thresholds                   |
+| Bull Queues       | `BULL_QUEUE_*`                                                       | Job queue retry and backoff settings      |
+| Admin / Seed      | `ADMIN_*`, `AGENT_*`, `TENANT_*`, `LANDLORD_*`                       | Default seed account configuration        |
 
 ### Required Variables by Environment
 
 The table below marks each variable as required (`R`), optional (`O`), or not applicable (`-`) per environment.
 
-| Variable | Development | Staging | Production | Test |
-|---|---|---|---|---|
-| `NODE_ENV` | R | R | R | R |
-| `PORT` | R | R | R | - |
-| `DB_HOST` | R | R | R | R |
-| `DB_PORT` | R | R | R | R |
-| `DB_USERNAME` | R | R | R | R |
-| `DB_PASSWORD` | R | R | R | R |
-| `DB_NAME` | R | R | R | R |
-| `DATABASE_URL` | - | - | R | - |
-| `DB_SSL` | - | - | R | - |
-| `JWT_SECRET` | R | R | R | R |
-| `JWT_REFRESH_SECRET` | R | R | R | R |
-| `JWT_EXPIRATION` | R | R | R | - |
-| `JWT_REFRESH_EXPIRATION` | R | R | R | - |
-| `RATE_LIMIT_TTL` | R | R | R | - |
-| `RATE_LIMIT_MAX` | R | R | R | - |
-| `RATE_LIMIT_AUTH_TTL` | R | R | R | - |
-| `RATE_LIMIT_AUTH_MAX` | R | R | R | - |
-| `RATE_LIMIT_STRICT_TTL` | R | R | R | - |
-| `RATE_LIMIT_STRICT_MAX` | R | R | R | - |
-| `REDIS_HOST` | R | R | - | - |
-| `REDIS_PORT` | R | R | - | - |
-| `REDIS_URL` | - | - | R | - |
-| `REDIS_TOKEN` | - | - | R | - |
-| `STELLAR_NETWORK` | R | R | R | - |
-| `SOROBAN_RPC_URL` | R | R | R | - |
-| `STELLAR_ADMIN_SECRET_KEY` | O | R | R | - |
-| `SECURITY_ENCRYPTION_KEY` | R | R | R | R |
-| `SENTRY_DSN` | O | O | R | - |
-| `LOG_LEVEL` | R | R | R | - |
-| `LOG_FORMAT` | O | R | R | - |
-| `METRICS_ENABLED` | O | R | R | - |
-| `TRACING_ENABLED` | O | R | R | - |
+| Variable                   | Development | Staging | Production | Test |
+| -------------------------- | ----------- | ------- | ---------- | ---- |
+| `NODE_ENV`                 | R           | R       | R          | R    |
+| `PORT`                     | R           | R       | R          | -    |
+| `DB_HOST`                  | R           | R       | R          | R    |
+| `DB_PORT`                  | R           | R       | R          | R    |
+| `DB_USERNAME`              | R           | R       | R          | R    |
+| `DB_PASSWORD`              | R           | R       | R          | R    |
+| `DB_NAME`                  | R           | R       | R          | R    |
+| `DATABASE_URL`             | -           | -       | R          | -    |
+| `DB_SSL`                   | -           | -       | R          | -    |
+| `JWT_SECRET`               | R           | R       | R          | R    |
+| `JWT_REFRESH_SECRET`       | R           | R       | R          | R    |
+| `JWT_EXPIRATION`           | R           | R       | R          | -    |
+| `JWT_REFRESH_EXPIRATION`   | R           | R       | R          | -    |
+| `RATE_LIMIT_TTL`           | R           | R       | R          | -    |
+| `RATE_LIMIT_MAX`           | R           | R       | R          | -    |
+| `RATE_LIMIT_AUTH_TTL`      | R           | R       | R          | -    |
+| `RATE_LIMIT_AUTH_MAX`      | R           | R       | R          | -    |
+| `RATE_LIMIT_STRICT_TTL`    | R           | R       | R          | -    |
+| `RATE_LIMIT_STRICT_MAX`    | R           | R       | R          | -    |
+| `REDIS_HOST`               | R           | R       | -          | -    |
+| `REDIS_PORT`               | R           | R       | -          | -    |
+| `REDIS_URL`                | -           | -       | R          | -    |
+| `REDIS_TOKEN`              | -           | -       | R          | -    |
+| `STELLAR_NETWORK`          | R           | R       | R          | -    |
+| `SOROBAN_RPC_URL`          | R           | R       | R          | -    |
+| `STELLAR_ADMIN_SECRET_KEY` | O           | R       | R          | -    |
+| `SECURITY_ENCRYPTION_KEY`  | R           | R       | R          | R    |
+| `SENTRY_DSN`               | O           | O       | R          | -    |
+| `LOG_LEVEL`                | R           | R       | R          | -    |
+| `LOG_FORMAT`               | O           | R       | R          | -    |
+| `METRICS_ENABLED`          | O           | R       | R          | -    |
+| `TRACING_ENABLED`          | O           | R       | R          | -    |
 
 ---
 
@@ -109,15 +109,15 @@ The table below marks each variable as required (`R`), optional (`O`), or not ap
 
 ### File Inventory
 
-| File | Purpose | Committed |
-|---|---|---|
-| `.env.example` | Canonical reference of all variables with placeholder values | Yes |
-| `.env.development` | Local development overrides | No |
-| `.env.staging` | Staging environment values (uses `${VAR}` references for secrets) | No |
-| `.env.production` | Production environment values (uses `${VAR}` references for secrets) | No |
-| `.env.test` | Minimal config for automated test runs | No |
-| `src/app.module.ts` | NestJS `ConfigModule` bootstrap and TypeORM / Redis / Throttler wiring | Yes |
-| `src/main.ts` | Application bootstrap — reads `PORT`, `CORS_ORIGINS`, `NODE_ENV`, request size limits | Yes |
+| File                | Purpose                                                                               | Committed |
+| ------------------- | ------------------------------------------------------------------------------------- | --------- |
+| `.env.example`      | Canonical reference of all variables with placeholder values                          | Yes       |
+| `.env.development`  | Local development overrides                                                           | No        |
+| `.env.staging`      | Staging environment values (uses `${VAR}` references for secrets)                     | No        |
+| `.env.production`   | Production environment values (uses `${VAR}` references for secrets)                  | No        |
+| `.env.test`         | Minimal config for automated test runs                                                | No        |
+| `src/app.module.ts` | NestJS `ConfigModule` bootstrap and TypeORM / Redis / Throttler wiring                | Yes       |
+| `src/main.ts`       | Application bootstrap — reads `PORT`, `CORS_ORIGINS`, `NODE_ENV`, request size limits | Yes       |
 
 ### `.env.example` Structure
 
@@ -153,6 +153,7 @@ REDIS_PASSWORD=
 ```
 
 When adding a new variable:
+
 1. Add it to `.env.example` with a safe placeholder value and a comment.
 2. Add it to the relevant environment files.
 3. Update the Required Variables table in this document.
@@ -228,9 +229,9 @@ All incoming request bodies are validated by a global `ValidationPipe` configure
 ```typescript
 app.useGlobalPipes(
   new ValidationPipe({
-    whitelist: true,              // strip unknown properties
-    forbidNonWhitelisted: true,   // reject requests with unknown properties
-    transform: true,              // auto-transform payloads to DTO types
+    whitelist: true, // strip unknown properties
+    forbidNonWhitelisted: true, // reject requests with unknown properties
+    transform: true, // auto-transform payloads to DTO types
     skipMissingProperties: false,
     disableErrorMessages: isProduction, // hide details in production
   }),
@@ -239,13 +240,13 @@ app.useGlobalPipes(
 
 ### Configuration Error Handling
 
-| Error | Cause | Resolution |
-|---|---|---|
-| `Missing required environment variables: X` | Variable absent at startup | Add the variable to the environment file and restart |
-| `TypeError: Cannot read properties of undefined` | `parseInt(undefined)` on a missing numeric var | Ensure the variable is set; add startup validation |
-| `Redis connection refused` | `REDIS_HOST` / `REDIS_PORT` incorrect or Redis not running | Verify Redis is running and credentials are correct |
-| `SSL connection error` | `DB_SSL` not set or `DATABASE_URL` missing `?sslmode=require` | Add `DB_SSL=true` and append `?sslmode=require` to `DATABASE_URL` |
-| `JWT malformed` | `JWT_SECRET` mismatch between token issuer and verifier | Ensure the same secret is used across all instances |
+| Error                                            | Cause                                                         | Resolution                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `Missing required environment variables: X`      | Variable absent at startup                                    | Add the variable to the environment file and restart              |
+| `TypeError: Cannot read properties of undefined` | `parseInt(undefined)` on a missing numeric var                | Ensure the variable is set; add startup validation                |
+| `Redis connection refused`                       | `REDIS_HOST` / `REDIS_PORT` incorrect or Redis not running    | Verify Redis is running and credentials are correct               |
+| `SSL connection error`                           | `DB_SSL` not set or `DATABASE_URL` missing `?sslmode=require` | Add `DB_SSL=true` and append `?sslmode=require` to `DATABASE_URL` |
+| `JWT malformed`                                  | `JWT_SECRET` mismatch between token issuer and verifier       | Ensure the same secret is used across all instances               |
 
 ---
 
@@ -454,20 +455,20 @@ Secrets are environment variables whose exposure would compromise security. They
 
 ### What Counts as a Secret
 
-| Variable | Classification |
-|---|---|
-| `JWT_SECRET`, `JWT_REFRESH_SECRET` | Critical |
-| `SECURITY_ENCRYPTION_KEY` | Critical |
-| `DB_PASSWORD`, `DATABASE_URL` | Critical |
-| `STELLAR_ADMIN_SECRET_KEY`, `SERVER_STELLAR_SECRET` | Critical |
-| `PAYSTACK_SECRET_KEY`, `FLUTTERWAVE_SECRET_KEY` | High |
-| `PINATA_JWT` | High |
-| `ANCHOR_API_KEY` | High |
-| `SENTRY_DSN` | Medium |
-| `REDIS_PASSWORD`, `REDIS_TOKEN` | Medium |
-| `EMAIL_PASSWORD` | High |
-| `SECURITY_SESSION_SECRET` | High |
-| `PAYMENT_METADATA_SECRET` | High |
+| Variable                                            | Classification |
+| --------------------------------------------------- | -------------- |
+| `JWT_SECRET`, `JWT_REFRESH_SECRET`                  | Critical       |
+| `SECURITY_ENCRYPTION_KEY`                           | Critical       |
+| `DB_PASSWORD`, `DATABASE_URL`                       | Critical       |
+| `STELLAR_ADMIN_SECRET_KEY`, `SERVER_STELLAR_SECRET` | Critical       |
+| `PAYSTACK_SECRET_KEY`, `FLUTTERWAVE_SECRET_KEY`     | High           |
+| `PINATA_JWT`                                        | High           |
+| `ANCHOR_API_KEY`                                    | High           |
+| `SENTRY_DSN`                                        | Medium         |
+| `REDIS_PASSWORD`, `REDIS_TOKEN`                     | Medium         |
+| `EMAIL_PASSWORD`                                    | High           |
+| `SECURITY_SESSION_SECRET`                           | High           |
+| `PAYMENT_METADATA_SECRET`                           | High           |
 
 ### Storage Rules
 
@@ -549,11 +550,13 @@ Before deploying to any environment, verify:
 **Development**: Edit `.env.development` and restart the server (`pnpm start:dev`).
 
 **Staging / Production (Render)**:
+
 1. Update the variable in the Render dashboard.
 2. Trigger a redeploy (Render automatically restarts the service on environment variable changes).
 3. Monitor logs for startup errors.
 
 **Staging / Production (Docker)**:
+
 1. Update the secret in the secret store.
 2. Update the environment variable in the deployment manifest or `docker-compose.production.yml`.
 3. Redeploy: `docker-compose -f docker-compose.production.yml up -d --force-recreate`.
@@ -563,6 +566,7 @@ Before deploying to any environment, verify:
 For variables that do not require a restart (e.g., feature flags read at request time), update the value in the secret store and allow the running instance to pick it up on the next read.
 
 For variables read at startup (database credentials, JWT secrets, encryption keys), a rolling restart is required:
+
 1. Deploy a new instance with the updated variable.
 2. Wait for the new instance to pass health checks.
 3. Drain and terminate the old instance.
@@ -570,6 +574,7 @@ For variables read at startup (database credentials, JWT secrets, encryption key
 ### Rollback
 
 To roll back a configuration change:
+
 1. Restore the previous variable value in the secret store or hosting platform.
 2. Trigger a redeploy.
 3. Verify the application starts and health checks pass.
@@ -585,6 +590,7 @@ To roll back a configuration change:
 **Cause**: One or more required variables are absent.
 
 **Resolution**:
+
 1. Compare the running environment against `.env.example`.
 2. Add the missing variables.
 3. Restart the application.
@@ -604,6 +610,7 @@ To roll back a configuration change:
 **Cause**: Redis is not running or `REDIS_HOST` / `REDIS_PORT` are incorrect.
 
 **Resolution**:
+
 - Development: `docker-compose up -d redis`
 - Production: Verify `REDIS_URL` and `REDIS_TOKEN` are set for Upstash.
 
@@ -642,6 +649,7 @@ To roll back a configuration change:
 **Cause**: `SECURITY_ENCRYPTION_KEY` is not exactly 64 hex characters, or a new key was deployed without retaining the old key for decryption fallback.
 
 **Resolution**:
+
 1. Verify key length: `echo -n "$SECURITY_ENCRYPTION_KEY" | wc -c` should return `64`.
 2. If rotating keys, keep the old key available for decryption during the transition window. See `backend/docs/security/SECRETS_MANAGEMENT.md`.
 

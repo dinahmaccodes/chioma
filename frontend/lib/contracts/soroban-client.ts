@@ -12,8 +12,7 @@ import {
   getSorobanRpcUrl,
 } from './config';
 
-const DUMMY_SOURCE =
-  'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
+const DUMMY_SOURCE = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
 
 let rpcServer: rpc.Server | null = null;
 
@@ -61,7 +60,10 @@ export interface ChiomaContractState {
 export async function readChiomaState(): Promise<ChiomaContractState | null> {
   const { chioma } = getContractIds();
   if (!chioma) return null;
-  return (await simulateContractCall(chioma, 'get_state')) as ChiomaContractState;
+  return (await simulateContractCall(
+    chioma,
+    'get_state',
+  )) as ChiomaContractState;
 }
 
 export async function readContractMethod<T>(

@@ -75,7 +75,11 @@ export default function NewDisputePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.agreementId || !formData.disputeType || !formData.description) {
+    if (
+      !formData.agreementId ||
+      !formData.disputeType ||
+      !formData.description
+    ) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -193,7 +197,9 @@ export default function NewDisputePage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="MAINTENANCE">Maintenance Issue</SelectItem>
-                <SelectItem value="SECURITY_DEPOSIT">Security Deposit</SelectItem>
+                <SelectItem value="SECURITY_DEPOSIT">
+                  Security Deposit
+                </SelectItem>
                 <SelectItem value="RENT_PAYMENT">Rent Payment</SelectItem>
                 <SelectItem value="PROPERTY_DAMAGE">Property Damage</SelectItem>
                 <SelectItem value="TERMINATION">Termination</SelectItem>
@@ -239,7 +245,11 @@ export default function NewDisputePage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1 font-semibold" disabled={submitting}>
+            <Button
+              type="submit"
+              className="flex-1 font-semibold"
+              disabled={submitting}
+            >
               {submitting ? 'Creating Dispute...' : 'File Dispute'}
             </Button>
           </div>

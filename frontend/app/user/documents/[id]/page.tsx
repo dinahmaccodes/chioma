@@ -82,7 +82,10 @@ export default function UserDocumentDetailPage() {
     return (
       <div className="max-w-lg mx-auto text-center py-16">
         <p className="text-white font-semibold mb-2">{error ?? 'Not found'}</p>
-        <Link href="/user/documents" className="text-blue-400 hover:text-blue-300">
+        <Link
+          href="/user/documents"
+          className="text-blue-400 hover:text-blue-300"
+        >
           ← Back to documents
         </Link>
       </div>
