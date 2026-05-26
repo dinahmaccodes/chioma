@@ -30,15 +30,23 @@ vi.mock('@/store/authStore', () => ({
 }));
 
 vi.mock('next/image', () => ({
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) => {
+  default: (
+    props: React.ImgHTMLAttributes<HTMLImageElement> & {
+      fill?: boolean;
+      priority?: boolean;
+    },
+  ) => {
     const { fill, priority, ...rest } = props;
     return React.createElement('img', rest);
   },
 }));
 
 vi.mock('next/link', () => ({
-  default: (props: React.AnchorHTMLAttributes<HTMLAnchorElement> & { children: React.ReactNode }) =>
-    React.createElement('a', props, props.children),
+  default: (
+    props: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+      children: React.ReactNode;
+    },
+  ) => React.createElement('a', props, props.children),
 }));
 
 vi.mock('@/components/Logo', () => ({
@@ -48,7 +56,11 @@ vi.mock('@/components/Logo', () => ({
 
 vi.mock('@/components/notifications', () => ({
   NotificationBell: (props: Record<string, unknown>) =>
-    React.createElement('div', { 'data-testid': 'notification-bell', ...props }, '🔔'),
+    React.createElement(
+      'div',
+      { 'data-testid': 'notification-bell', ...props },
+      '🔔',
+    ),
 }));
 
 import Topbar from '../Topbar';
@@ -91,7 +103,9 @@ describe('Admin Topbar', () => {
     const searchButton = screen.getByLabelText('Open search');
     fireEvent.click(searchButton);
 
-    const mobileSearchInput = screen.getAllByPlaceholderText('Search dashboard...');
+    const mobileSearchInput = screen.getAllByPlaceholderText(
+      'Search dashboard...',
+    );
     expect(mobileSearchInput.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -105,6 +119,8 @@ describe('Admin Topbar', () => {
   it('renders with greeting for different page titles', () => {
     render(<Topbar pageTitle="Security Dashboard" />);
 
-    expect(screen.getAllByText('Security Dashboard').length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText('Security Dashboard').length,
+    ).toBeGreaterThanOrEqual(1);
   });
 });

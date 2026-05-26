@@ -47,7 +47,9 @@ describe('PropertyCard', () => {
   it('renders property location', () => {
     render(React.createElement(PropertyCard, { property: mockProperty }));
 
-    expect(screen.getByText('123 Ocean Drive, Miami Beach, FL')).toBeInTheDocument();
+    expect(
+      screen.getByText('123 Ocean Drive, Miami Beach, FL'),
+    ).toBeInTheDocument();
   });
 
   it('renders bed count', () => {
@@ -111,13 +113,20 @@ describe('PropertyCard', () => {
   });
 
   it('renders in list variant', () => {
-    render(React.createElement(PropertyCard, { property: mockProperty, variant: 'list' }));
+    render(
+      React.createElement(PropertyCard, {
+        property: mockProperty,
+        variant: 'list',
+      }),
+    );
 
     expect(screen.getByText('Smart Lease')).toBeInTheDocument();
   });
 
   it('renders the wishlist button', () => {
-    const { container } = render(React.createElement(PropertyCard, { property: mockProperty }));
+    const { container } = render(
+      React.createElement(PropertyCard, { property: mockProperty }),
+    );
 
     const wishlistButton = container.querySelector('button');
     expect(wishlistButton).toBeInTheDocument();

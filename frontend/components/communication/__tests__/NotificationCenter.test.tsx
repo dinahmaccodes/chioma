@@ -42,7 +42,14 @@ vi.mock('@/store/notificationStore', () => ({
 
 vi.mock('@/components/notifications/NotificationItem', () => ({
   default: (props: Record<string, unknown>) =>
-    React.createElement('div', { 'data-testid': `notification-item-${(props.notification as Notification).id}`, ...props }, (props.notification as Notification).title),
+    React.createElement(
+      'div',
+      {
+        'data-testid': `notification-item-${(props.notification as Notification).id}`,
+        ...props,
+      },
+      (props.notification as Notification).title,
+    ),
 }));
 
 function createDefaultStore() {
@@ -63,10 +70,15 @@ import { NotificationCenter } from '../NotificationCenter';
 describe('NotificationCenter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseNotificationStore.mockImplementation((selector?: (s: Record<string, unknown>) => unknown) => {
-      const store = createDefaultStore() as unknown as Record<string, unknown>;
-      return selector ? selector(store) : store;
-    });
+    mockUseNotificationStore.mockImplementation(
+      (selector?: (s: Record<string, unknown>) => unknown) => {
+        const store = createDefaultStore() as unknown as Record<
+          string,
+          unknown
+        >;
+        return selector ? selector(store) : store;
+      },
+    );
   });
 
   it('renders the notification bell button', () => {
@@ -92,16 +104,18 @@ describe('NotificationCenter', () => {
       createdAt: '2024-01-01T00:00:00Z',
     }));
 
-    mockUseNotificationStore.mockImplementation((selector?: (s: Record<string, unknown>) => unknown) => {
-      const store = {
-        notifications: manyNotifications,
-        isLoaded: true,
-        fetchNotifications: vi.fn().mockResolvedValue(undefined),
-        markAsRead: vi.fn(),
-        markAllAsRead: vi.fn(),
-      } as unknown as Record<string, unknown>;
-      return selector ? selector(store) : store;
-    });
+    mockUseNotificationStore.mockImplementation(
+      (selector?: (s: Record<string, unknown>) => unknown) => {
+        const store = {
+          notifications: manyNotifications,
+          isLoaded: true,
+          fetchNotifications: vi.fn().mockResolvedValue(undefined),
+          markAsRead: vi.fn(),
+          markAllAsRead: vi.fn(),
+        } as unknown as Record<string, unknown>;
+        return selector ? selector(store) : store;
+      },
+    );
 
     render(React.createElement(NotificationCenter));
     expect(screen.getByText('99+')).toBeInTheDocument();
@@ -131,18 +145,23 @@ describe('NotificationCenter', () => {
   });
 
   it('shows "All caught up" when there are no unread notifications', async () => {
-    const allReadNotifications = mockNotifications.map((n) => ({ ...n, read: true }));
+    const allReadNotifications = mockNotifications.map((n) => ({
+      ...n,
+      read: true,
+    }));
 
-    mockUseNotificationStore.mockImplementation((selector?: (s: Record<string, unknown>) => unknown) => {
-      const store = {
-        notifications: allReadNotifications,
-        isLoaded: true,
-        fetchNotifications: vi.fn().mockResolvedValue(undefined),
-        markAsRead: vi.fn(),
-        markAllAsRead: vi.fn(),
-      } as unknown as Record<string, unknown>;
-      return selector ? selector(store) : store;
-    });
+    mockUseNotificationStore.mockImplementation(
+      (selector?: (s: Record<string, unknown>) => unknown) => {
+        const store = {
+          notifications: allReadNotifications,
+          isLoaded: true,
+          fetchNotifications: vi.fn().mockResolvedValue(undefined),
+          markAsRead: vi.fn(),
+          markAllAsRead: vi.fn(),
+        } as unknown as Record<string, unknown>;
+        return selector ? selector(store) : store;
+      },
+    );
 
     render(React.createElement(NotificationCenter));
     fireEvent.click(screen.getByLabelText(/Open notifications/));
@@ -164,23 +183,27 @@ describe('NotificationCenter', () => {
   });
 
   it('shows empty state when no notifications match filter', async () => {
-    mockUseNotificationStore.mockImplementation((selector?: (s: Record<string, unknown>) => unknown) => {
-      const store = {
-        notifications: [],
-        isLoaded: true,
-        fetchNotifications: vi.fn().mockResolvedValue(undefined),
-        markAsRead: vi.fn(),
-        markAllAsRead: vi.fn(),
-      } as unknown as Record<string, unknown>;
-      return selector ? selector(store) : store;
-    });
+    mockUseNotificationStore.mockImplementation(
+      (selector?: (s: Record<string, unknown>) => unknown) => {
+        const store = {
+          notifications: [],
+          isLoaded: true,
+          fetchNotifications: vi.fn().mockResolvedValue(undefined),
+          markAsRead: vi.fn(),
+          markAllAsRead: vi.fn(),
+        } as unknown as Record<string, unknown>;
+        return selector ? selector(store) : store;
+      },
+    );
 
     render(React.createElement(NotificationCenter));
 
     fireEvent.click(screen.getByLabelText(/Open notifications/));
 
     await waitFor(() => {
-      expect(screen.getByText('No notifications in this view.')).toBeInTheDocument();
+      expect(
+        screen.getByText('No notifications in this view.'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -193,7 +216,9 @@ describe('NotificationCenter', () => {
       expect(screen.getByText('Notification Center')).toBeInTheDocument();
     });
 
-    const dropdown = screen.getByText('Notification Center').closest('div')?.parentElement;
+    const dropdown = screen
+      .getByText('Notification Center')
+      .closest('div')?.parentElement;
     const closeButton = dropdown?.querySelector('button:last-of-type');
     expect(closeButton).toBeTruthy();
     if (closeButton) fireEvent.click(closeButton);
@@ -206,16 +231,18 @@ describe('NotificationCenter', () => {
   it('fetches notifications on mount if not loaded', () => {
     const fetchNotifications = vi.fn().mockResolvedValue(undefined);
 
-    mockUseNotificationStore.mockImplementation((selector?: (s: Record<string, unknown>) => unknown) => {
-      const store = {
-        notifications: [],
-        isLoaded: false,
-        fetchNotifications,
-        markAsRead: vi.fn(),
-        markAllAsRead: vi.fn(),
-      } as unknown as Record<string, unknown>;
-      return selector ? selector(store) : store;
-    });
+    mockUseNotificationStore.mockImplementation(
+      (selector?: (s: Record<string, unknown>) => unknown) => {
+        const store = {
+          notifications: [],
+          isLoaded: false,
+          fetchNotifications,
+          markAsRead: vi.fn(),
+          markAllAsRead: vi.fn(),
+        } as unknown as Record<string, unknown>;
+        return selector ? selector(store) : store;
+      },
+    );
 
     render(React.createElement(NotificationCenter));
 

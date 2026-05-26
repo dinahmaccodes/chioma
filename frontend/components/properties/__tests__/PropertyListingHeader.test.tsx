@@ -46,11 +46,15 @@ describe('PropertyListingHeader', () => {
 
   it('calls onSortChange when sort option changes', () => {
     const onSortChange = vi.fn();
-    render(React.createElement(PropertyListingHeader, { count: 10, onSortChange }));
+    render(
+      React.createElement(PropertyListingHeader, { count: 10, onSortChange }),
+    );
 
     const selects = screen.getAllByRole('combobox');
     const desktopSelect = selects[1];
-    fireEvent.change(desktopSelect, { target: { value: 'Price: Low to High' } });
+    fireEvent.change(desktopSelect, {
+      target: { value: 'Price: Low to High' },
+    });
 
     expect(onSortChange).toHaveBeenCalledWith('Price: Low to High');
   });

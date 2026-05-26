@@ -30,15 +30,23 @@ vi.mock('@/store/authStore', () => ({
 }));
 
 vi.mock('next/image', () => ({
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) => {
+  default: (
+    props: React.ImgHTMLAttributes<HTMLImageElement> & {
+      fill?: boolean;
+      priority?: boolean;
+    },
+  ) => {
     const { fill, priority, ...rest } = props;
     return React.createElement('img', rest);
   },
 }));
 
 vi.mock('next/link', () => ({
-  default: (props: React.AnchorHTMLAttributes<HTMLAnchorElement> & { children: React.ReactNode }) =>
-    React.createElement('a', props, props.children),
+  default: (
+    props: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+      children: React.ReactNode;
+    },
+  ) => React.createElement('a', props, props.children),
 }));
 
 vi.mock('@/components/Logo', () => ({
