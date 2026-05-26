@@ -23,7 +23,6 @@ jobs:
   lint-and-test:
     name: Lint, Format & Test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     defaults:
       run:
         working-directory: ./frontend
