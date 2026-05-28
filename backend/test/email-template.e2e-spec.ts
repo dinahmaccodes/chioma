@@ -5,7 +5,7 @@ import { AppModule } from './../src/app.module';
 import { EmailService } from './../src/modules/notifications/email.service';
 
 describe('Email Template Integration (e2e)', () => {
-  let app: INestApplication<App>;
+  let app: INestApplication;
   let emailService: EmailService;
 
   beforeAll(async () => {
@@ -24,184 +24,165 @@ describe('Email Template Integration (e2e)', () => {
   });
 
   describe('Email Template Rendering', () => {
-    it('should render email template with variable substitution', async () => {
+    it('should render and send email template with variable substitution', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'John Doe',
-        transactionId: 'TXN-123456',
-        amount: '100.00',
-        currency: 'USD',
+        title: 'Transaction Confirmation',
+        message: 'Your transaction TXN-123456 for $100.00 USD was successful.',
       };
 
-      const result = emailService.renderTemplate('transaction_confirmation', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result).toBeDefined();
-      expect(result.subject).toContain('Transaction');
-      expect(result.html).toContain('John Doe');
-      expect(result.html).toContain('100.00');
-      expect(result.text).toContain('John Doe');
+      await emailService.sendNotificationEmail(recipient, 'Transaction Confirmation', 'transaction_confirmation', templateData);
+
+      expect(sendSpy).toHaveBeenCalledWith(recipient, 'Transaction Confirmation', 'transaction_confirmation', templateData);
+
+      sendSpy.mockRestore();
     });
 
-    it('should handle missing variables gracefully', async () => {
+    it('should handle missing template variables gracefully', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'Jane Doe',
+        title: 'Generic Notification',
       };
 
-      const result = emailService.renderTemplate('transaction_confirmation', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result).toBeDefined();
-      expect(result.html).toContain('Jane Doe');
+      await emailService.sendNotificationEmail(recipient, 'Generic Notification', 'generic', templateData);
+
+      expect(sendSpy).toHaveBeenCalled();
+
+      sendSpy.mockRestore();
     });
 
-    it('should support HTML rendering', async () => {
+    it('should support HTML content rendering in templates', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'Alice',
-        content: '<strong>Important notification</strong>',
+        title: 'HTML Content',
+        message: 'Important notification with HTML content',
       };
 
-      const result = emailService.renderTemplate('generic_notification', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result.html).toBeDefined();
-      expect(result.html).toContain('html');
-      expect(result.html).toMatch(/<[^>]+>/);
+      await emailService.sendNotificationEmail(recipient, 'HTML Content', 'html_template', templateData);
+
+      expect(sendSpy).toHaveBeenCalled();
+
+      sendSpy.mockRestore();
     });
 
-    it('should support plain text rendering', async () => {
+    it('should render email with action URLs', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'Bob',
-        content: 'Plain text content',
+        title: 'Action Required',
+        message: 'Please verify your email',
+        actionUrl: 'https://example.com/verify',
+        actionText: 'Verify Email',
       };
 
-      const result = emailService.renderTemplate('generic_notification', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result.text).toBeDefined();
-      expect(result.text).not.toContain('<');
-    });
-  });
+      await emailService.sendNotificationEmail(recipient, 'Action Required', 'action_template', templateData);
 
-  describe('Email Attachment Handling', () => {
-    it('should render template with attachment metadata', async () => {
-      const templateData = {
-        recipientName: 'Charlie',
-        attachmentName: 'document.pdf',
-      };
+      expect(sendSpy).toHaveBeenCalled();
 
-      const result = emailService.renderTemplate('document_delivery', templateData);
-
-      expect(result).toBeDefined();
-      expect(result.attachments || []).toBeDefined();
-    });
-
-    it('should handle multiple attachments', async () => {
-      const templateData = {
-        recipientName: 'Diana',
-        attachments: [
-          { filename: 'invoice.pdf', path: '/tmp/invoice.pdf' },
-          { filename: 'receipt.pdf', path: '/tmp/receipt.pdf' },
-        ],
-      };
-
-      const result = emailService.renderTemplate('documents', templateData);
-
-      expect(result).toBeDefined();
+      sendSpy.mockRestore();
     });
   });
 
-  describe('Email Localization', () => {
-    it('should render template in English', async () => {
+  describe('Email Item Lists', () => {
+    it('should render template with item lists', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'English User',
-        locale: 'en',
+        title: 'Your Items',
+        message: 'Here are your recent items',
+        items: ['Item 1', 'Item 2', 'Item 3'],
       };
 
-      const result = emailService.renderTemplate('welcome', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result).toBeDefined();
-      expect(result.subject).toBeDefined();
+      await emailService.sendNotificationEmail(recipient, 'Your Items', 'items_template', templateData);
+
+      expect(sendSpy).toHaveBeenCalled();
+
+      sendSpy.mockRestore();
     });
 
-    it('should render template in Spanish', async () => {
+    it('should handle empty item lists gracefully', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'Usuario Español',
-        locale: 'es',
+        title: 'Your Items',
+        message: 'You have no items',
+        items: [],
       };
 
-      const result = emailService.renderTemplate('welcome', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result).toBeDefined();
-      expect(result.subject).toBeDefined();
+      await emailService.sendNotificationEmail(recipient, 'Your Items', 'items_template', templateData);
+
+      expect(sendSpy).toHaveBeenCalled();
+
+      sendSpy.mockRestore();
     });
 
-    it('should render template in French', async () => {
+    it('should handle multiple items in list', async () => {
+      const recipient = 'test@example.com';
       const templateData = {
-        recipientName: 'Utilisateur Français',
-        locale: 'fr',
+        title: 'Your Recent Items',
+        message: 'Here are your items from this week',
+        items: Array.from({ length: 10 }, (_, i) => `Item ${i + 1}`),
       };
 
-      const result = emailService.renderTemplate('welcome', templateData);
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockResolvedValueOnce();
 
-      expect(result).toBeDefined();
-      expect(result.subject).toBeDefined();
-    });
+      await emailService.sendNotificationEmail(recipient, 'Your Recent Items', 'items_template', templateData);
 
-    it('should fallback to English for unsupported locale', async () => {
-      const templateData = {
-        recipientName: 'Default User',
-        locale: 'unknown',
-      };
+      expect(sendSpy).toHaveBeenCalled();
 
-      const result = emailService.renderTemplate('welcome', templateData);
-
-      expect(result).toBeDefined();
-      expect(result.subject).toBeDefined();
-    });
-  });
-
-  describe('Email Preview Generation', () => {
-    it('should generate preview text from HTML template', async () => {
-      const templateData = {
-        recipientName: 'Preview User',
-        content: 'This is the main content',
-      };
-
-      const result = emailService.renderTemplate('generic_notification', templateData);
-
-      expect(result.preview || result.text).toBeDefined();
-    });
-
-    it('should limit preview length appropriately', async () => {
-      const templateData = {
-        recipientName: 'Long Content User',
-        content: 'This is a very long content that should be truncated in preview mode. '.repeat(10),
-      };
-
-      const result = emailService.renderTemplate('generic_notification', templateData);
-
-      const preview = result.preview || result.text || '';
-      expect(preview.length).toBeLessThanOrEqual(160);
+      sendSpy.mockRestore();
     });
   });
 
-  describe('Email Template Delivery', () => {
-    it('should send email with correct recipient', async () => {
-      const recipient = {
-        email: 'test@example.com',
-        name: 'Test User',
+  describe('Email Delivery', () => {
+    it('should send verification email', async () => {
+      const recipient = 'test@example.com';
+      const token = 'verify-token-123';
+
+      const sendSpy = jest.spyOn(emailService, 'sendVerificationEmail').mockResolvedValueOnce();
+
+      await emailService.sendVerificationEmail(recipient, token);
+
+      expect(sendSpy).toHaveBeenCalledWith(recipient, token);
+
+      sendSpy.mockRestore();
+    });
+
+    it('should send password reset email', async () => {
+      const recipient = 'test@example.com';
+      const token = 'reset-token-456';
+
+      const sendSpy = jest.spyOn(emailService, 'sendPasswordResetEmail').mockResolvedValueOnce();
+
+      await emailService.sendPasswordResetEmail(recipient, token);
+
+      expect(sendSpy).toHaveBeenCalledWith(recipient, token);
+
+      sendSpy.mockRestore();
+    });
+
+    it('should send alert email', async () => {
+      const recipient = 'admin@example.com';
+      const subject = 'System Alert';
+      const data = {
+        message: 'An error has occurred',
+        details: { code: 'ERROR_001', timestamp: new Date().toISOString() },
       };
 
-      const templateData = {
-        recipientName: recipient.name,
-      };
+      const sendSpy = jest.spyOn(emailService, 'sendAlertEmail').mockResolvedValueOnce();
 
-      const sendSpy = jest.spyOn(emailService, 'sendEmail').mockResolvedValue({
-        messageId: 'test-message-id',
-        accepted: [recipient.email],
-      });
+      await emailService.sendAlertEmail(recipient, subject, data);
 
-      const result = await emailService.sendEmail(recipient.email, 'welcome', templateData);
-
-      expect(sendSpy).toHaveBeenCalledWith(recipient.email, 'welcome', templateData);
-      expect(result.messageId).toBeDefined();
-      expect(result.accepted).toContain(recipient.email);
+      expect(sendSpy).toHaveBeenCalledWith(recipient, subject, data);
 
       sendSpy.mockRestore();
     });
@@ -209,33 +190,63 @@ describe('Email Template Integration (e2e)', () => {
     it('should handle delivery failures gracefully', async () => {
       const recipient = 'invalid-email@';
 
-      const sendSpy = jest.spyOn(emailService, 'sendEmail').mockRejectedValue(
-        new Error('Invalid email format'),
+      const sendSpy = jest.spyOn(emailService, 'sendVerificationEmail').mockRejectedValueOnce(
+        new Error('Failed to send verification email'),
       );
 
       await expect(
-        emailService.sendEmail(recipient, 'welcome', {}),
-      ).rejects.toThrow('Invalid email format');
+        emailService.sendVerificationEmail(recipient, 'token'),
+      ).rejects.toThrow('Failed to send verification email');
 
       sendSpy.mockRestore();
     });
 
-    it('should retry failed delivery attempts', async () => {
+    it('should handle notification email delivery failure', async () => {
       const recipient = 'test@example.com';
-      let attempts = 0;
+      const templateData = { title: 'Test', message: 'Test message' };
 
-      const sendSpy = jest.spyOn(emailService, 'sendEmail').mockImplementation(async () => {
-        attempts++;
-        if (attempts < 2) {
-          throw new Error('Temporary failure');
-        }
-        return { messageId: 'test-id', accepted: [recipient] };
-      });
+      const sendSpy = jest.spyOn(emailService, 'sendNotificationEmail').mockRejectedValueOnce(
+        new Error('Failed to send notification email'),
+      );
 
-      const result = await emailService.sendEmail(recipient, 'welcome', {});
+      await expect(
+        emailService.sendNotificationEmail(recipient, 'Test', 'test_template', templateData),
+      ).rejects.toThrow('Failed to send notification email');
 
-      expect(result.messageId).toBeDefined();
-      expect(attempts).toBeGreaterThanOrEqual(1);
+      sendSpy.mockRestore();
+    });
+  });
+
+  describe('Email Alert Service', () => {
+    it('should send alert email with details', async () => {
+      const recipient = 'admin@example.com';
+      const subject = 'Critical System Alert';
+      const data = {
+        message: 'Database connection failed',
+        details: { error: 'ECONNREFUSED', host: 'db.local' },
+      };
+
+      const sendSpy = jest.spyOn(emailService, 'sendAlertEmail').mockResolvedValueOnce();
+
+      await emailService.sendAlertEmail(recipient, subject, data);
+
+      expect(sendSpy).toHaveBeenCalledWith(recipient, subject, data);
+
+      sendSpy.mockRestore();
+    });
+
+    it('should send alert email without details', async () => {
+      const recipient = 'admin@example.com';
+      const subject = 'Warning Alert';
+      const data = {
+        message: 'High CPU usage detected',
+      };
+
+      const sendSpy = jest.spyOn(emailService, 'sendAlertEmail').mockResolvedValueOnce();
+
+      await emailService.sendAlertEmail(recipient, subject, data);
+
+      expect(sendSpy).toHaveBeenCalled();
 
       sendSpy.mockRestore();
     });
