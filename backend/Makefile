@@ -86,6 +86,12 @@ test-e2e: ## Run end-to-end tests (requires PostgreSQL)
 	pnpm run test:e2e --forceExit
 	@echo "$(GREEN)✓ E2E tests passed$(NC)"
 
+test-chaos: ## Run chaos engineering resilience tests (requires PostgreSQL)
+	@echo "$(BLUE)Running chaos engineering tests...$(NC)"
+	@echo "$(YELLOW)Note: Ensure PostgreSQL is running and environment variables are set$(NC)"
+	pnpm run test:e2e -- --testPathPattern=chaos-resilience --forceExit
+	@echo "$(GREEN)✓ Chaos engineering tests passed$(NC)"
+
 ##@ Build
 
 build: ## Build the application

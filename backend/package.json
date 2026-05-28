@@ -28,6 +28,7 @@
     "perf:local": "node scripts/load-test.mjs local --report-format=html",
     "perf:staging": "node scripts/load-test.mjs staging --report-format=html",
     "perf:ci": "node scripts/performance-benchmark-enhanced.mjs --report-format=json",
+    "test:chaos": "pnpm run test:e2e -- --testPathPattern=chaos-resilience --forceExit",
     "sdk:generate": "node scripts/sdk-generate.mjs",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:generate": "npm run typeorm migration:generate -- -d src/database/data-source.ts",
