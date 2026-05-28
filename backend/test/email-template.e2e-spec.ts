@@ -1,8 +1,6 @@
 import './setup-env';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { EmailService } from './../src/modules/notifications/email.service';
 
@@ -34,7 +32,7 @@ describe('Email Template Integration (e2e)', () => {
         currency: 'USD',
       };
 
-      const result = await emailService.renderTemplate('transaction_confirmation', templateData);
+      const result = emailService.renderTemplate('transaction_confirmation', templateData);
 
       expect(result).toBeDefined();
       expect(result.subject).toContain('Transaction');
@@ -48,7 +46,7 @@ describe('Email Template Integration (e2e)', () => {
         recipientName: 'Jane Doe',
       };
 
-      const result = await emailService.renderTemplate('transaction_confirmation', templateData);
+      const result = emailService.renderTemplate('transaction_confirmation', templateData);
 
       expect(result).toBeDefined();
       expect(result.html).toContain('Jane Doe');

@@ -192,7 +192,7 @@ describe('End-to-End Payment Flow Integration (e2e)', () => {
 
       const paymentId = initiateResponse.body.paymentId;
 
-      const submitResponse = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/api/payments/${paymentId}/submit`)
         .expect(200);
 
@@ -222,7 +222,7 @@ describe('End-to-End Payment Flow Integration (e2e)', () => {
         .post(`/api/payments/${paymentId}/submit`)
         .expect(200);
 
-      const confirmResponse = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/api/payments/${paymentId}/confirm`)
         .expect(200);
 
@@ -308,7 +308,7 @@ describe('End-to-End Payment Flow Integration (e2e)', () => {
 
       const paymentId = initiateResponse.body.paymentId;
 
-      const submitResponse1 = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/api/payments/${paymentId}/submit`)
         .expect(200);
 
