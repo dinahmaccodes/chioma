@@ -29,6 +29,10 @@ import { LoggerService } from './common/services/logger.service';
 
 const bootstrapLogger = new Logger('Bootstrap');
 
+// Graceful shutdown state
+let isShuttingDown = false;
+let activeConnections = 0;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
@@ -206,7 +210,107 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT ?? 5000;
-  await app.listen(port);
+  const server = await app.listen(port);
   bootstrapLogger.log(`Application started on port ${port}`);
+
+  // ==================== GRACEFUL SHUTDOWN ====================
+  // Track active connections
+  server.on('connection', (conn) => {
+    activeConnections++;
+    conn.on('close', () => {
+      activeConnections--;
+    });
+  });
+
+  // Handle graceful shutdown signals
+  const gracefulShutdown = async (signal: string) => {
+    if (isShuttingDown) {
+      bootstrapLogger.warn(`Shutdown already in progress, ignoring ${signal}`);
+      return;
+    }
+
+    isShuttingDown = true;
+    bootstrapLogger.log(`Received ${signal}, starting graceful shutdown...`);
+
+    // Stop accepting new connections
+    server.close(async () => {
+      bootstrapLogger.log('HTTP server closed');
+    });
+
+    // Wait for active connections to close (with timeout)
+    const shutdownTimeout = parseInt(
+      process.env.GRACEFUL_SHUTDOWN_TIMEOUT || '30000',
+      10,
+    );
+    const startTime = Date.now();
+
+    while (activeConnections > 0) {
+      const elapsed = Date.now() - startTime;
+      if (elapsed > shutdownTimeout) {
+        bootstrapLogger.warn(
+          `Graceful shutdown timeout exceeded. Forcing exit with ${activeConnections} active connections.`,
+        );
+        break;
+      }
+      bootstrapLogger.log(
+        `Waiting for ${activeConnections} active connections to close...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
+    // Close database connections
+    try {
+      const dataSource = app.get('DataSource');
+      if (dataSource?.isInitialized) {
+        bootstrapLogger.log('Closing database connections...');
+        await dataSource.destroy();
+        bootstrapLogger.log('Database connections closed');
+      }
+    } catch (error) {
+      bootstrapLogger.error('Error closing database connections:', error);
+    }
+
+    // Close Redis connections
+    try {
+      const redisService = app.get('RedisService');
+      if (redisService?.disconnect) {
+        bootstrapLogger.log('Closing Redis connections...');
+        await redisService.disconnect();
+        bootstrapLogger.log('Redis connections closed');
+      }
+    } catch (error) {
+      bootstrapLogger.error('Error closing Redis connections:', error);
+    }
+
+    // Close NestJS application
+    await app.close();
+    bootstrapLogger.log('Application closed successfully');
+    process.exit(0);
+  };
+
+  // Register signal handlers
+  process.on('SIGTERM', () => {
+    void gracefulShutdown('SIGTERM');
+  });
+  process.on('SIGINT', () => {
+    void gracefulShutdown('SIGINT');
+  });
+
+  // Handle uncaught exceptions
+  process.on('uncaughtException', (error) => {
+    bootstrapLogger.error('Uncaught Exception:', error);
+    gracefulShutdown('uncaughtException');
+  });
+
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (reason, promise) => {
+    bootstrapLogger.error(
+      'Unhandled Rejection at:',
+      promise,
+      'reason:',
+      reason,
+    );
+    gracefulShutdown('unhandledRejection');
+  });
 }
 void bootstrap();
