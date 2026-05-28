@@ -19,6 +19,7 @@ import { PropertiesModule } from './modules/properties/properties.module';
 import { StellarModule } from './modules/stellar/stellar.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { StatusModule } from './modules/status/status.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { PaymentModule } from './modules/payments/payment.module';
@@ -213,6 +214,7 @@ const appLogger = new Logger('AppModule');
     StellarModule,
     DisputesModule,
     MonitoringModule,
+    StatusModule,
     // Load HealthModule only when not generating OpenAPI (avoids loading broken @nestjs/terminus in script)
     ...(process.env.OPENAPI_GENERATE !== 'true'
       ? [require('./health/health.module').HealthModule]
@@ -235,6 +237,8 @@ const appLogger = new Logger('AppModule');
     ReferralModule,
     InquiriesModule,
     AnalyticsModule,
+    require('./modules/database-performance/database-performance.module')
+      .DatabasePerformanceModule,
     TransactionModule,
     ...(process.env.OPENAPI_GENERATE !== 'true' ? [RateLimitingModule] : []),
     // Maintenance module
